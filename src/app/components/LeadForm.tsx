@@ -96,7 +96,7 @@ export default function LeadForm() {
       <div className="space-y-2">
         <label className="text-sm text-white/70">Ism Familya</label>
         <input
-          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
+          className="w-full rounded-2xl bg-orange-100 px-4 py-3 text-black/70 outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="Masalan: Aliyev Azamat"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
@@ -107,7 +107,7 @@ export default function LeadForm() {
       <div className="space-y-2">
         <label className="text-sm text-white/70">Telefon raqam</label>
         <input
-          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
+          className="w-full rounded-2xl bg-orange-100 px-4 py-3 text-black/70 outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="+998 90 123 45 67"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
@@ -119,7 +119,7 @@ export default function LeadForm() {
       <div className="space-y-2">
         <label className="text-sm text-white/70">Yashash joyi</label>
         <input
-          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
+          className="w-full rounded-2xl bg-orange-100 px-4 py-3 text-black/70 outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="Masalan: Samarqand"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
@@ -130,8 +130,8 @@ export default function LeadForm() {
       <div className="space-y-2">
         <label className="text-sm text-white/70">Yosh (Age)</label>
         <input
-          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
-          placeholder="Masalan: 18"
+          className="w-full rounded-2xl bg-orange-100 px-4 py-3 text-black/70 outline-none ring-1 ring-orange-600 focus:ring-2 focus:ring-(--tb-orange)"
+          placeholder="Masalan: 21"
           value={age}
           onChange={(e) => setAge(e.target.value)}
           inputMode="numeric"
@@ -147,7 +147,7 @@ export default function LeadForm() {
       <button
         type="submit"
         disabled={loading || !canSubmit}
-        className="w-full rounded-2xl bg-(--tb-orange) px-4 py-3 font-semibold text-black transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-2xl bg-orange-600 cursor-pointer px-4 py-3 font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? "Yuborilmoqda..." : "Yuborish"}
       </button>
