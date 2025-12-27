@@ -12,10 +12,65 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+
 export const metadata: Metadata = {
-  title: "TexnoBoost — hammasi oson!",
-  description: "TexnoBoost ro‘yxatdan o‘tish sahifasi",
+  metadataBase: new URL("https://texnoboost.vercel.app/"), // ⬅️ domeningizni yozing (yoki Vercel domen)
+  title: {
+    default: "TexnoBoost — hammasi oson!",
+    template: "%s | TexnoBoost",
+  },
+  description:
+    "Perfectum telefonlari bo‘yicha tez ro‘yxatdan o‘ting — operatorlar qisqa vaqt ichida bog‘lanadi va ulanish bo‘yicha yordam beradi.",
+  applicationName: "TexnoBoost",
+  keywords: [
+    "TexnoBoost",
+    "Perfectum",
+    "telefon",
+    "aloqa",
+    "ro‘yxatdan o‘tish",
+    "Samarqand",
+  ],
+  themeColor: "#FB923C", // och apelsin (orange)
+
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/logo.PNG", type: "image/png", sizes: "32x32" },
+      { url: "/logo.PNG", type: "image/png", sizes: "192x192" },
+    ],
+    apple: [{ url: "/logo.PNG", sizes: "180x180" }],
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "uz_UZ",
+    url: "/",
+    siteName: "TexnoBoost",
+    title: "TexnoBoost — hammasi oson!",
+    description:
+      "Perfectum telefonlari bo‘yicha tez ro‘yxatdan o‘ting. Operatorlar siz bilan bog‘lanadi va ulanishni yo‘lga qo‘yadi.",
+    images: [
+      // ✅ eng zo‘ri: 1200x630 rasm (og.png) bo‘lsin
+      { url: "/og.png", width: 1200, height: 630, alt: "TexnoBoost" },
+      // ✅ zahira: sizda bor logo
+      { url: "/logo.PNG", width: 512, height: 512, alt: "TexnoBoost logo" },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "TexnoBoost — hammasi oson!",
+    description:
+      "Perfectum telefonlari bo‘yicha tez ro‘yxatdan o‘ting. Operatorlar siz bilan bog‘lanadi.",
+    images: ["/og.png"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
+
 
 export default function RootLayout({
   children,
