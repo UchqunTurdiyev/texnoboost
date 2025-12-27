@@ -15,7 +15,6 @@ function normalizePhone(v: string) {
 }
 
 function isValidPhone(v: string) {
-  // +998901234567 yoki 998901234567 yoki (90) 123-45-67 kabi ko‘rinishlar uchun yumshoq tekshiruv
   return /^\+?\d[\d\s()-]{7,}$/.test(v);
 }
 
@@ -72,7 +71,17 @@ export default function LeadForm() {
         throw new Error(data.error || "Yuborishda xatolik yuz berdi.");
       }
 
-      router.push(`/thank-you?name=${encodeURIComponent(payload.fullName)}`);
+      // ✅ QO‘SHILDI: ismni thank-you sahifasida chiqarish uchun saqlab qo‘yamiz
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("tb_name", payload.fullName);
+        // xohlasangiz boshqa maydonlarni ham saqlash mumkin:
+        // sessionStorage.setItem("tb_phone", payload.phone);
+        // sessionStorage.setItem("tb_location", payload.location);
+        // sessionStorage.setItem("tb_age", String(payload.age));
+      }
+
+      // ✅ QO‘SHILDI: querysiz o‘tamiz (prerender muammo bermaydi)
+      router.push("/thank-you");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Noma’lum xatolik.");
     } finally {
@@ -87,7 +96,7 @@ export default function LeadForm() {
       <div className="space-y-2">
         <label className="text-sm text-white/70">Ism Familya</label>
         <input
-          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-[color:var(--tb-orange)]"
+          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="Masalan: Aliyev Azamat"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
@@ -98,7 +107,7 @@ export default function LeadForm() {
       <div className="space-y-2">
         <label className="text-sm text-white/70">Telefon raqam</label>
         <input
-          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-[color:var(--tb-orange)]"
+          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="+998 90 123 45 67"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
@@ -110,7 +119,7 @@ export default function LeadForm() {
       <div className="space-y-2">
         <label className="text-sm text-white/70">Yashash joyi</label>
         <input
-          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-[color:var(--tb-orange)]"
+          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="Masalan: Samarqand"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
@@ -121,7 +130,7 @@ export default function LeadForm() {
       <div className="space-y-2">
         <label className="text-sm text-white/70">Yosh (Age)</label>
         <input
-          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-[color:var(--tb-orange)]"
+          className="w-full rounded-2xl bg-black/40 px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="Masalan: 18"
           value={age}
           onChange={(e) => setAge(e.target.value)}
@@ -138,7 +147,7 @@ export default function LeadForm() {
       <button
         type="submit"
         disabled={loading || !canSubmit}
-        className="w-full rounded-2xl bg-[color:var(--tb-orange)] px-4 py-3 font-semibold text-black transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-2xl bg-(--tb-orange) px-4 py-3 font-semibold text-black transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? "Yuborilmoqda..." : "Yuborish"}
       </button>
