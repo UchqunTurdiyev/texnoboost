@@ -94,7 +94,7 @@ export default function LeadForm() {
       <h3 className="text-xl font-semibold">Ro‘yxatdan o‘tish</h3>
 
       <div className="space-y-2">
-        <label className="text-sm text-white/70">Ism Familya</label>
+        <label className="text-sm text-black/70">Ism Familya</label>
         <input
           className="w-full rounded-2xl bg-orange-100 px-4 py-3 text-black/70 outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="Masalan: Aliyev Azamat"
@@ -105,7 +105,7 @@ export default function LeadForm() {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm text-white/70">Telefon raqam</label>
+        <label className="text-sm text-black/70">Telefon raqam</label>
         <input
           className="w-full rounded-2xl bg-orange-100 px-4 py-3 text-black/70 outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="+998 90 123 45 67"
@@ -117,7 +117,7 @@ export default function LeadForm() {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm text-white/70">Yashash joyi</label>
+        <label className="text-sm text-black/70">Yashash joyi</label>
         <input
           className="w-full rounded-2xl bg-orange-100 px-4 py-3 text-black/70 outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="Masalan: Samarqand"
@@ -128,7 +128,7 @@ export default function LeadForm() {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm text-white/70">Yosh (Age)</label>
+        <label className="text-sm text-black/70">Yosh </label>
         <input
           className="w-full rounded-2xl bg-orange-100 px-4 py-3 text-black/70 outline-none ring-1 ring-orange-600 focus:ring-2 focus:ring-(--tb-orange)"
           placeholder="Masalan: 21"
