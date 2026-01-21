@@ -8,7 +8,7 @@ export default function ThankYouPage() {
 
   const telegramUrl =
     (process.env.NEXT_PUBLIC_TELEGRAM_URL || "").trim() ||
-    "https://t.me/texnoboost_admin1";
+    "https://t.me/texnoboostadmin1";
 
   useEffect(() => {
     const savedName = sessionStorage.getItem("tb_name");
