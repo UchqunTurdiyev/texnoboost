@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import TargetLeadModel from "@/models/TargetLead";
 import { connectToDB } from "@/lib/mongodb";
 
+// SHU QATORNI QO'SHING: Bu Next.js'ga ma'lumotni keshlamaslikni buyuradi!
+export const dynamic = 'force-dynamic';
+
 function clean(s: unknown): string {
   return typeof s === "string" ? s.trim() : "";
 }
