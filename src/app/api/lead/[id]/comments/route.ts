@@ -2,10 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/lib/mongodb";
 import TargetLeadModel from "@/models/TargetLead";
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(
+  req: NextRequest, 
+  { params }: { params: Promise<{ id: string }> } // Params endi Promise
+) {
   try {
     await connectToDB();
-    const { id } = params;
+    
+    // params-ni await qilib id-ni olamiz
+    const { id } = await params; 
     const { text } = await req.json();
 
     if (!text || text.trim() === "") {

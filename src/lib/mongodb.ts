@@ -9,7 +9,9 @@ if (!MONGODB_URI) {
   );
 }
 
-// Qolgan kod o‘zgarmaydi...
+/** * Global o'zgaruvchini e'lon qilish (Next.js development rejimida 
+ * har safar ulanishni yangilamasligi uchun)
+ */
 let cached = (global as any).mongoose;
 
 if (!cached) {
@@ -23,7 +25,13 @@ export async function connectToDB() {
     const opts = {
       bufferCommands: false,
     };
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => mongoose);
+
+    /** * Bu yerda MONGODB_URI orqasiga "as string" qo'shdik. 
+     * Bu TypeScript-ga: "Xavotir olma, bu aniq matn (string)" degan buyruqdir.
+     */
+    cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((m) => {
+      return m;
+    });
   }
 
   try {
