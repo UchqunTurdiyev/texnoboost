@@ -1,13 +1,19 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+// ✅ QO'SHILDI: TypeScript uchun utm maydonlari qo'shildi
 type LeadPayload = {
   fullName: string;
   phone: string;
   location: string;
   age: number;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
 };
 
 function normalizePhone(v: string) {
@@ -28,6 +34,29 @@ export default function LeadForm() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // ✅ QO'SHILDI: UTM ma'lumotlarini saqlash uchun state
+  const [utmData, setUtmData] = useState({
+    utm_source: "direct",
+    utm_medium: "",
+    utm_campaign: "",
+    utm_content: "",
+    utm_term: "",
+  });
+
+  // ✅ QO'SHILDI: Sahifa yuklanganda URL'dan UTM larni ajratib olish
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      setUtmData({
+        utm_source: params.get("utm_source") || "direct",
+        utm_medium: params.get("utm_medium") || "",
+        utm_campaign: params.get("utm_campaign") || "",
+        utm_content: params.get("utm_content") || "",
+        utm_term: params.get("utm_term") || "",
+      });
+    }
+  }, []);
 
   const canSubmit = useMemo(() => {
     const a = Number(age);
@@ -50,11 +79,13 @@ export default function LeadForm() {
       return;
     }
 
+    // ✅ O'ZGARTIRILDI: Formadagi ma'lumotlarga UTM ma'lumotlari qo'shib yuborilyapti
     const payload: LeadPayload = {
       fullName: fullName.trim(),
       phone: normalizePhone(phone),
       location: location.trim(),
       age: Number(age),
+      ...utmData, 
     };
 
     setLoading(true);
@@ -71,16 +102,10 @@ export default function LeadForm() {
         throw new Error(data.error || "Yuborishda xatolik yuz berdi.");
       }
 
-      // ✅ QO‘SHILDI: ismni thank-you sahifasida chiqarish uchun saqlab qo‘yamiz
       if (typeof window !== "undefined") {
         sessionStorage.setItem("tb_name", payload.fullName);
-        // xohlasangiz boshqa maydonlarni ham saqlash mumkin:
-        // sessionStorage.setItem("tb_phone", payload.phone);
-        // sessionStorage.setItem("tb_location", payload.location);
-        // sessionStorage.setItem("tb_age", String(payload.age));
       }
 
-      // ✅ QO‘SHILDI: querysiz o‘tamiz (prerender muammo bermaydi)
       router.push("/thank-you");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Noma’lum xatolik.");

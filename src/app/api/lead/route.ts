@@ -17,7 +17,7 @@ function isValidPhone(v: string): boolean {
   return /^\+?\d[\d\s()-]{7,}$/.test(v);
 }
 
-function escapeHtml(input: string): string {
+function escapeHtml(input: string | undefined | null): string {
   if (!input) return "";
   return input
     .toString()
@@ -44,7 +44,7 @@ async function sendToTelegram(payload: any) {
     `<b>Ism Familya:</b> ${escapeHtml(payload.fullName)}\n` +
     `<b>Tel:</b> ${escapeHtml(payload.phone)}\n` +
     `<b>Manzil:</b> ${escapeHtml(payload.location || "Ko'rsatilmagan")}\n` +
-    `<b>Yosh:</b> ${payload.age || "Ko'rsatilmagan"}\n\n` +
+    `<b>Yosh:</b> ${escapeHtml(payload.age?.toString() || "Ko'rsatilmagan")}\n\n` +
     `<b>🌐 Marketing (UTM):</b>\n` +
     `<b>Manba (Source):</b> ${escapeHtml(payload.utm_source || "direct")}\n` +
     `<b>Tur (Medium):</b> ${escapeHtml(payload.utm_medium || "-")}\n` +
@@ -62,7 +62,7 @@ async function sendToTelegram(payload: any) {
       disable_web_page_preview: true,
     }),
   });
-} // <--- Mana shu qavs tushib qolgan edi
+}
 
 export async function POST(req: Request) {
   try {
@@ -81,15 +81,16 @@ export async function POST(req: Request) {
 
     await connectToDB();
 
-    // UTM ma'lumotlarini olish
+    // UTM ma'lumotlarini olish va tozalash
     const utmData = {
-      utm_source: body.utm_source || "",
-      utm_medium: body.utm_medium || "",
-      utm_campaign: body.utm_campaign || "",
-      utm_content: body.utm_content || "",
-      utm_term: body.utm_term || ""
+      utm_source: clean(body.utm_source) || "direct",
+      utm_medium: clean(body.utm_medium) || "",
+      utm_campaign: clean(body.utm_campaign) || "",
+      utm_content: clean(body.utm_content) || "",
+      utm_term: clean(body.utm_term) || ""
     };
 
+    // MongoDB ga yozish (Diqqat: TargetLeadModel da utm_ maydonlari qo'shilgan bo'lishi kerak)
     const lead = await TargetLeadModel.create({
       fullName,
       phone,
@@ -99,7 +100,7 @@ export async function POST(req: Request) {
       status: "LID",
       businessType: body.businessType || "",
       budget: body.budget || "",
-      ...utmData, // MongoDB modelda bu maydonlar bo'lishi kerak
+      ...utmData, 
       comments: [],
     });
 
@@ -142,6 +143,12 @@ export async function GET() {
       budget: lead.budget,
       status: lead.status,
       createdAt: lead.createdAt,
+      // Admin panel uchun UTM ma'lumotlarini ham qaytaramiz
+      utm_source: lead.utm_source || "",
+      utm_medium: lead.utm_medium || "",
+      utm_campaign: lead.utm_campaign || "",
+      utm_content: lead.utm_content || "",
+      utm_term: lead.utm_term || "",
       lastComment: lead.comments?.length
         ? lead.comments[lead.comments.length - 1].text
         : "",
