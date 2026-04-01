@@ -45,14 +45,14 @@ interface Lead {
   utm_term?: string;
 }
 
-const STATUSES = ["LID", "KO'TARMADI", "O'YLAB KO'RAMAN", "O'QIYMAN", "TO'LOV QILDI", "KEYINGI OY", "O'QIMAYDI", "ONLINE"];
+const STATUSES = ["LID", "KO'TARMADI", "O'YLAB KO'RAMAN", "SOTIB OLADI", "TO'LOV QILDI", "KEYINROQ OLAMAN", "LIMITI BOR", "SOTIB OLMAYDI"];
 
 // --- 2. Ustun Komponenti ---
 function StatusColumn({ status, count, children }: { status: string; count: number; children: React.ReactNode }) {
   const { setNodeRef } = useDroppable({ id: status });
 
   return (
-    <div ref={setNodeRef} className="min-w-80 shrink-0 bg-[#0f172a]/50 rounded-xl border border-gray-900 p-3 flex flex-col h-fit min-h-[500px]">
+    <div ref={setNodeRef} className="min-w-80 shrink-0 bg-[#0f172a]/50 rounded-xl border border-gray-900 p-3 flex flex-col h-fit min-h-125">
       <h3 className="text-gray-500 font-bold text-[10px] mb-4 uppercase tracking-widest">
         {status} ({count})
       </h3>
@@ -336,7 +336,7 @@ export default function CRMPage() {
       
       {/* OGOHLANTIRUV MODALI */}
       {reminderAlert && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-[#1e293b] border-2 border-orange-500 p-8 rounded-2xl max-w-sm w-full text-center shadow-[0_0_50px_rgba(249,115,22,0.4)]">
             <div className="text-6xl mb-4 animate-bounce">🔔</div>
             <h2 className="text-xl font-bold text-white mb-2 uppercase">Vaqt bo&apos;ldi!</h2>
