@@ -250,6 +250,25 @@ export default function CRMPage() {
   const [loading, setLoading] = useState(true);
   const [reminderAlert, setReminderAlert] = useState<Lead | null>(null);
 
+  // --- META PURCHASE XABARDOR QILISH FUNKSIYASI ---
+  const notifyMetaPurchase = async (lead: Lead) => {
+    try {
+      await fetch('/api/purchase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: lead.phone,
+          name: lead.fullName,
+          value: 2000000, // Kurs narxi
+          currency: 'UZS'
+        }),
+      });
+      console.log("Meta API: Muvaffaqiyatli yuborildi");
+    } catch (err) {
+      console.error("Meta API xatosi:", err);
+    }
+  };
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
@@ -258,7 +277,6 @@ export default function CRMPage() {
   // --- OGOHLANTIRUV TIZIMI ---
   useEffect(() => {
     const interval = setInterval(() => {
-      // O'zbekiston mahalliy vaqtini ISO formatiga yaqinlashtirib olish (YYYY-MM-DDTHH:mm)
       const now = new Date();
       const yil = now.getFullYear();
       const oy = String(now.getMonth() + 1).padStart(2, '0');
@@ -269,11 +287,9 @@ export default function CRMPage() {
       const hozir = `${yil}-${oy}-${kun}T${soat}:${minut}`;
       
       leads.forEach(lead => {
-        // Eslatma vaqti (YYYY-MM-DDTHH:mm) bilan Hozirgi vaqtni solishtirish
         if (lead.reminderDate && lead.reminderDate.slice(0, 16) === hozir) {
           setReminderAlert(lead);
           
-          // Brauzer Notification
           if ("Notification" in window && Notification.permission === "granted") {
             new Notification(`🔔 ESLATMA: ${lead.fullName}`, {
               body: `${lead.phone} bilan bog'lanish vaqti bo'ldi!`,
@@ -281,7 +297,7 @@ export default function CRMPage() {
           }
         }
       });
-    }, 60000); // Har minutda tekshiradi
+    }, 60000);
 
     return () => clearInterval(interval);
   }, [leads]);
@@ -314,18 +330,26 @@ export default function CRMPage() {
     setActiveId(null);
     if (!over) return;
 
-    const activeId = String(active.id);
-    const overId = String(over.id);
-    const activeLead = leads.find(l => l.id === activeId);
-    const newStatus = STATUSES.includes(overId) ? overId : leads.find(l => l.id === overId)?.status;
+    const activeIdStr = String(active.id);
+    const overIdStr = String(over.id);
+    const activeLead = leads.find(l => l.id === activeIdStr);
+    const newStatus = STATUSES.includes(overIdStr) ? overIdStr : leads.find(l => l.id === overIdStr)?.status;
 
     if (activeLead && newStatus && activeLead.status !== newStatus) {
-      setLeads((prev) => prev.map(l => l.id === activeId ? { ...l, status: newStatus } : l));
-      await fetch(`/api/lead/${activeId}`, {
+      // UI yangilash
+      setLeads((prev) => prev.map(l => l.id === activeIdStr ? { ...l, status: newStatus } : l));
+      
+      // Bazani yangilash
+      await fetch(`/api/lead/${activeIdStr}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
+
+      // --- META CONVERSION API TRIGGER ---
+      if (newStatus === "TO'LOV QILDI") {
+        notifyMetaPurchase(activeLead);
+      }
     }
   };
 
